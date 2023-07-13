@@ -5,9 +5,7 @@ describe("Deploy Gas Challenge Contract", () => {
   let gas_contract;
 
   beforeEach(async () => {
-    const gas_challenge_contract = await ethers.getContractFactory(
-      "gasChallenge"
-    );
+    const gas_challenge_contract = await ethers.getContractFactory("gasChallenge");
     gas_contract = await gas_challenge_contract.deploy();
     await gas_contract.deployed();
   });
@@ -23,13 +21,20 @@ describe("Deploy Gas Challenge Contract", () => {
       console.log("Not Optimized Gas Used:", notOptimizedReceipt.gasUsed.toString());
       console.log("Optimized Gas Used:", optimizedReceipt.gasUsed.toString());
 
-      expect(notOptimizedReceipt.gasUsed).to.be.greaterThan(optimizedReceipt.gasUsed);
+      expect(optimizedReceipt.gasUsed).to.be.lessThan(notOptimizedReceipt.gasUsed);
     });
   });
 
   describe("Check Sum Of Array", () => {
     it("Should return 0", async () => {
+      await gas_contract.optimizedFunction();
+  
       const sum = await gas_contract.getSumOfArray();
+      const numbers = await gas_contract.numbers;
+  
+      console.log("Array Elements:", numbers);
+      console.log("Sum:", sum.toString());
+  
       expect(sum).to.equal(0);
     });
   });
